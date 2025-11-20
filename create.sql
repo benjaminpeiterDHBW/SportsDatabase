@@ -1,161 +1,185 @@
---
--- Tabellenstruktur für Tabelle 'Sport'
---
-
+-- Tabelle 'sport':
+-- Verwaltet die verschiedenen Teamsportarten (z.B. Fußball, Basketball)
+-- inklusive Standardteamgröße und Angabe, ob Hallensport oder nicht.
 CREATE TABLE IF NOT EXISTS sport
 (
-    sport_id          int(11)     NOT NULL auto_increment,
-    name              varchar(30) NOT NULL,
-    default_team_size int default NULL,
-    is_indoor         boolean,
-    PRIMARY KEY (sport_id)
+    sport_id          INT(11)      NOT NULL AUTO_INCREMENT,
+    name              VARCHAR(30)  NOT NULL,
+    default_team_size INT DEFAULT NULL,
+    is_indoor         BOOLEAN,
+    PRIMARY KEY (sport_id),
+    UNIQUE KEY uq_sport_name (name)
 );
 
---
--- Tabellenstruktur für Tabelle 'Season'
---
-
+-- Tabelle 'season'
+-- Speichert die Saisons (z.B. "SoSe 2025") mit Start- und Enddatum,
+-- um Wettbewerbe zeitlich zu strukturieren.
 CREATE TABLE IF NOT EXISTS season
 (
-    season_id  int(11)     NOT NULL auto_increment,
-    name       varchar(30) NOT NULL,
+    season_id  INT(11)     NOT NULL AUTO_INCREMENT,
+    name       VARCHAR(30) NOT NULL,
     start_date DATE        NOT NULL,
     end_date   DATE        NOT NULL,
-    PRIMARY KEY (season_id)
+    PRIMARY KEY (season_id),
+    CHECK (start_date < end_date)
 );
 
---
--- Tabellenstruktur für Tabelle 'Competition'
---
+-- Tabelle 'competition'
+-- Beschreibt konkrete Wettbewerbe/Ligen einer Sportart in einer bestimmten Saison
+-- (z.B. "Hochschulliga Fußball Herren SoSe 2025") mit Level, Modus und Geschlechterkategorie.
 CREATE TABLE IF NOT EXISTS competition
 (
-    competition_id  int(11)     NOT NULL auto_increment,
-    sport_id        int(11)     NOT NULL,
-    season_id       int(11)     NOT NULL,
-    name            varchar(30) NOT NULL,
-    level           varchar(30),
-    gender_category varchar(30),
-    mode            varchar(30),
+    competition_id  INT(11)     NOT NULL AUTO_INCREMENT,
+    sport_id        INT(11)     NOT NULL,
+    season_id       INT(11)     NOT NULL,
+    name            VARCHAR(30) NOT NULL,
+    level           VARCHAR(30),
+    gender_category VARCHAR(30),
+    mode            VARCHAR(30),
     PRIMARY KEY (competition_id),
-    FOREIGN KEY (sport_id) references sport (sport_id),
-    FOREIGN KEY (season_id) references season (season_id)
+    CONSTRAINT fk_comp_sport
+        FOREIGN KEY (sport_id)  REFERENCES sport (sport_id),
+    CONSTRAINT fk_comp_season
+        FOREIGN KEY (season_id) REFERENCES season (season_id),
+    -- Eine Competition soll je Sport/Saison/Name nur einmal existieren
+    UNIQUE KEY uq_comp_sport_season_name (sport_id, season_id, name)
 );
 
---
--- Tabellenstruktur für Tabelle 'Venue'
---
+-- Tabelle 'venue'
+-- Enthält alle Spielorte (Hallen/Plätze) der Hochschule inklusive Stadt und Kapazität,
+-- an denen Spiele der Competitions ausgetragen werden.
 CREATE TABLE IF NOT EXISTS venue
 (
-    venue_id int(11)     NOT NULL auto_increment,
-    name     varchar(20) NOT NULL,
-    city     varchar(20) NOT NULL,
-    capacity int(11),
+    venue_id INT(11)     NOT NULL AUTO_INCREMENT,
+    name     VARCHAR(50) NOT NULL,
+    city     VARCHAR(50) NOT NULL,
+    capacity INT(11),
     PRIMARY KEY (venue_id)
 );
 
---
--- Tabellenstruktur für Tabelle 'Team'
---
+-- Tabelle 'team'
+-- Speichert alle Teams (unabhängig von einzelnen Competitions) mit Namen, Kurzname
+-- und einem zugeordneten Heimspielort (home_venue_id).
 CREATE TABLE IF NOT EXISTS team
 (
-    team_id       int(11)     NOT NULL auto_increment,
-    name          varchar(30) NOT NULL,
-    short_name    varchar(10),
-    home_venue_id int(11)     NOT NULL,
+    team_id       INT(11)     NOT NULL AUTO_INCREMENT,
+    name          VARCHAR(30) NOT NULL,
+    short_name    VARCHAR(10),
+    home_venue_id INT(11)     NOT NULL,
     PRIMARY KEY (team_id),
-    FOREIGN KEY (home_venue_id) references venue(venue_id)
+    CONSTRAINT fk_team_home_venue
+        FOREIGN KEY (home_venue_id) REFERENCES venue(venue_id)
 );
 
---
--- Tabellenstruktur für Tabelle 'Player'
---
+-- Tabelle 'player'
+-- Verwaltet die Spieler:innen mit Stammdaten (Name, Matrikelnummer, Geburtsdatum, E-Mail),
+-- die später Teams und Spielen zugeordnet werden.
 CREATE TABLE IF NOT EXISTS player
 (
-    player_id     int(11)     NOT NULL auto_increment,
-    first_name    varchar(20) NOT NULL,
-    last_name     varchar(30) NOT NULL,
-    student_id    int(11)     NOT NULL,
-    date_of_birth DATETIME    NOT NULL,
-    email         varchar(50),
-    PRIMARY KEY (player_id)
+    player_id     INT(11)      NOT NULL AUTO_INCREMENT,
+    first_name    VARCHAR(20)  NOT NULL,
+    last_name     VARCHAR(30)  NOT NULL,
+    student_id    VARCHAR(20)  NOT NULL,
+    date_of_birth DATE         NOT NULL,
+    email         VARCHAR(50),
+    PRIMARY KEY (player_id),
+    -- Matrikelnummer soll eindeutig sein
+    UNIQUE KEY uq_player_student_id (student_id)
 );
 
---
--- Tabellenstruktur für Tabelle 'Team Player Zuordnung'
---
+-- Tabelle 'team_player'
+-- Bildet die M:N-Zuordnung zwischen Teams und Spieler:innen ab.
+-- Enthält zusätzlich Kaderzeiträume (from/to_date), Rückennummer und Position
+-- und ermöglicht damit eine Kaderhistorie pro Team.
 CREATE TABLE IF NOT EXISTS team_player
 (
-    team_id       int(11) NOT NULL,
-    player_id     int(11) NOT NULL,
-    from_date     DATETIME,
+    team_id       INT(11)  NOT NULL,
+    player_id     INT(11)  NOT NULL,
+    from_date     DATETIME NOT NULL,
     to_date       DATETIME,
-    jersey_number int(3),
-    position      varchar(20),
-    FOREIGN KEY (team_id) references team (team_id),
-    FOREIGN KEY (player_id) references player (player_id)
+    jersey_number INT(3),
+    position      VARCHAR(20),
+    PRIMARY KEY (team_id, player_id, from_date),
+    CONSTRAINT fk_team_player_team
+        FOREIGN KEY (team_id)   REFERENCES team (team_id),
+    CONSTRAINT fk_team_player_player
+        FOREIGN KEY (player_id) REFERENCES player (player_id)
 );
 
---
--- Tabellenstruktur für Tabelle 'Game'
---
+-- Tabelle 'game'
+-- Speichert alle Spiele einer Competition mit Zuordnung zu Wettbewerb, Spielort,
+-- Heim- und Auswärtsteam, geplantem Zeitpunkt, Ergebnis und Spielstatus.
 CREATE TABLE IF NOT EXISTS game
 (
-    game_id            int(11)  NOT NULL auto_increment,
-    competition_id     int(11)  NOT NULL,
-    venue_id           int(11)  NOT NULL,
-    gameday_number     int(11),
-    stage              varchar(15),
+    game_id            INT(11)  NOT NULL AUTO_INCREMENT,
+    competition_id     INT(11)  NOT NULL,
+    venue_id           INT(11)  NOT NULL,
+    gameday_number     INT(11),
+    stage              VARCHAR(15),
     scheduled_datetime DATETIME NOT NULL,
-    away_team_id       int(11)  NOT NULL,
-    home_team_id       int(11)  NOT NULL,
-    home_score         int(11) default NULL,
-    away_score         int(11) default NULL,
-    status             varchar(15),
+    away_team_id       INT(11)  NOT NULL,
+    home_team_id       INT(11)  NOT NULL,
+    home_score         INT(11) DEFAULT NULL,
+    away_score         INT(11) DEFAULT NULL,
+    status             VARCHAR(15),
     PRIMARY KEY (game_id),
-    FOREIGN KEY (competition_id)references competition (competition_id),
-    FOREIGN KEY (venue_id) references venue (venue_id),
-    FOREIGN KEY (away_team_id) references team (team_id),
-    FOREIGN KEY (home_team_id) references team (team_id)
+    CONSTRAINT fk_game_competition
+        FOREIGN KEY (competition_id) REFERENCES competition (competition_id),
+    CONSTRAINT fk_game_venue
+        FOREIGN KEY (venue_id)       REFERENCES venue (venue_id),
+    CONSTRAINT fk_game_away_team
+        FOREIGN KEY (away_team_id)   REFERENCES team (team_id),
+    CONSTRAINT fk_game_home_team
+        FOREIGN KEY (home_team_id)   REFERENCES team (team_id),
+    CHECK (home_team_id <> away_team_id)
 );
 
---
--- Tabellenstruktur für Tabelle 'game_player_stat'
---
+
+-- Tabelle 'game_player_stat'
+-- Hält Einzelstatistiken von Spieler:innen pro Spiel fest
+-- (z.B. erzielte Punkte/Tore, Spielminuten und Fouls) zur Auswertung von Leistungen.
 CREATE TABLE IF NOT EXISTS game_player_stat
 (
-    game_id        int(11) NOT NULL,
-    player_id      int(11) NOT NULL,
-    team_id        int(11) NOT NULL,
-    points         int(5),
-    goals          int(5),
-    minutes_played int(10),
-    fouls          int(5),
-    FOREIGN KEY (game_id) references game (game_id),
-    FOREIGN KEY (player_id) references player (player_id),
-    FOREIGN KEY (team_id) references team (team_id)
+    game_id        INT(11) NOT NULL,
+    player_id      INT(11) NOT NULL,
+    team_id        INT(11) NOT NULL,
+    points         INT(5),
+    goals          INT(5),
+    minutes_played INT(10),
+    fouls          INT(5),
+    PRIMARY KEY (game_id, player_id),
+    CONSTRAINT fk_gps_game
+        FOREIGN KEY (game_id)   REFERENCES game (game_id),
+    CONSTRAINT fk_gps_player
+        FOREIGN KEY (player_id) REFERENCES player (player_id),
+    CONSTRAINT fk_gps_team
+        FOREIGN KEY (team_id)   REFERENCES team (team_id)
 );
 
---
--- Tabellenstruktur für Tabelle 'Referee'
---
+-- Tabelle 'referee'
+-- Verwaltet Schiedsrichter:innen mit Namen und bevorzugter Sportart,
+-- die in Spielen eingesetzt werden können.
 CREATE TABLE IF NOT EXISTS referee
 (
-    referee_id         int(11)     NOT NULL auto_increment,
-    first_name         varchar(20) NOT NULL,
-    last_name          varchar(30) NOT NULL,
-    preferred_sport_id int(11)     NOT NULL,
+    referee_id         INT(11)     NOT NULL AUTO_INCREMENT,
+    first_name         VARCHAR(20) NOT NULL,
+    last_name          VARCHAR(30) NOT NULL,
+    preferred_sport_id INT(11)     NOT NULL,
     PRIMARY KEY (referee_id),
-    FOREIGN KEY (preferred_sport_id) references sport (sport_id)
+    CONSTRAINT fk_referee_sport
+        FOREIGN KEY (preferred_sport_id) REFERENCES sport (sport_id)
 );
 
---
--- Tabellenstruktur für Tabelle 'game_referee Zuordnung'
---
+-- Bildet die M:N-Zuordnung zwischen Spielen und Schiedsrichter:innen ab
+-- und speichert die Rolle der Schiedsrichter:innen im jeweiligen Spiel (z.B. Haupt- oder Assistent).
 CREATE TABLE IF NOT EXISTS game_referee
 (
-    game_id    int(11) NOT NULL,
-    referee_id int(11) NOT NULL,
-    role       varchar(25),
-    FOREIGN KEY (game_id) references game (game_id),
-    FOREIGN KEY (referee_id) references referee (referee_id)
+    game_id    INT(11) NOT NULL,
+    referee_id INT(11) NOT NULL,
+    role       VARCHAR(25),
+    PRIMARY KEY (game_id, referee_id),
+    CONSTRAINT fk_gr_game
+        FOREIGN KEY (game_id)    REFERENCES game (game_id),
+    CONSTRAINT fk_gr_referee
+        FOREIGN KEY (referee_id) REFERENCES referee (referee_id)
 );
