@@ -55,7 +55,7 @@ GRANT SELECT
 
 -- Datenpfleger
 -- Darf Stammdaten pflegen: Sportarten, Saisons, Spielorte, Teams
-GRANT SELECT, INSERT, UPDATE, DELETE
+GRANT SELECT, INSERT, UPDATE
     ON sportsdb.sport TO r_datenpfleger;
 GRANT SELECT, INSERT, UPDATE
     ON sportsdb.season TO r_datenpfleger;
