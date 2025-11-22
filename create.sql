@@ -135,51 +135,38 @@ CREATE TABLE IF NOT EXISTS game
 );
 
 
--- Tabelle 'game_player_stat'
--- Hält Einzelstatistiken von Spieler:innen pro Spiel fest
--- (z.B. erzielte Punkte/Tore, Spielminuten und Fouls) zur Auswertung von Leistungen.
-CREATE TABLE IF NOT EXISTS game_player_stat
+-- Tabelle 'comp_team'
+-- Bildet die M:N-Zuordnung zwischen Competitions und Teams ab,
+-- um festzulegen, welche Teams in welchen Wettbewerben antreten.
+CREATE TABLE IF NOT EXISTS comp_team
 (
-    game_id        INT(11) NOT NULL,
-    player_id      INT(11) NOT NULL,
+    competition_id INT(11) NOT NULL,
     team_id        INT(11) NOT NULL,
-    points         INT(5),
-    goals          INT(5),
-    minutes_played INT(10),
-    fouls          INT(5),
-    PRIMARY KEY (game_id, player_id),
-    CONSTRAINT fk_gps_game
+    registration_date DATE NOT NULL,
+    group_name       VARCHAR(30),
+    PRIMARY KEY (competition_id, team_id),
+    CONSTRAINT fk_comp_team_competition
+        FOREIGN KEY (competition_id) REFERENCES competition (competition_id),
+    CONSTRAINT fk_comp_team_team
+        FOREIGN KEY (team_id)        REFERENCES team (team_id)
+);
+
+-- Tabelle 'game_event'
+-- Protokolliert Ereignisse während eines Spiels (z.B. Tore, Karten)
+CREATE TABLE IF NOT EXISTS game_event
+(
+    event_id     INT(11)  NOT NULL AUTO_INCREMENT,
+    game_id      INT(11)  NOT NULL,
+    event_minute   INT(11)  NOT NULL,
+    event_type   VARCHAR(30) NOT NULL,
+    player_id    INT(11) NOT NULL,
+    team_id      INT(11) NOT NULL,
+    description  VARCHAR(100),
+    PRIMARY KEY (event_id),
+    CONSTRAINT fk_game_event_game
         FOREIGN KEY (game_id)   REFERENCES game (game_id),
-    CONSTRAINT fk_gps_player
+    CONSTRAINT fk_game_event_player
         FOREIGN KEY (player_id) REFERENCES player (player_id),
-    CONSTRAINT fk_gps_team
+    CONSTRAINT fk_game_event_team
         FOREIGN KEY (team_id)   REFERENCES team (team_id)
-);
-
--- Tabelle 'referee'
--- Verwaltet Schiedsrichter:innen mit Namen und bevorzugter Sportart,
--- die in Spielen eingesetzt werden können.
-CREATE TABLE IF NOT EXISTS referee
-(
-    referee_id         INT(11)     NOT NULL AUTO_INCREMENT,
-    first_name         VARCHAR(20) NOT NULL,
-    last_name          VARCHAR(30) NOT NULL,
-    preferred_sport_id INT(11)     NOT NULL,
-    PRIMARY KEY (referee_id),
-    CONSTRAINT fk_referee_sport
-        FOREIGN KEY (preferred_sport_id) REFERENCES sport (sport_id)
-);
-
--- Bildet die M:N-Zuordnung zwischen Spielen und Schiedsrichter:innen ab
--- und speichert die Rolle der Schiedsrichter:innen im jeweiligen Spiel (z.B. Haupt- oder Assistent).
-CREATE TABLE IF NOT EXISTS game_referee
-(
-    game_id    INT(11) NOT NULL,
-    referee_id INT(11) NOT NULL,
-    role       VARCHAR(25),
-    PRIMARY KEY (game_id, referee_id),
-    CONSTRAINT fk_gr_game
-        FOREIGN KEY (game_id)    REFERENCES game (game_id),
-    CONSTRAINT fk_gr_referee
-        FOREIGN KEY (referee_id) REFERENCES referee (referee_id)
 );
