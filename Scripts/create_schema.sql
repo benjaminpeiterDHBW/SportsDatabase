@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS competition
     competition_id  INT(11)     NOT NULL AUTO_INCREMENT,
     sport_id        INT(11)     NOT NULL,
     season_id       INT(11)     NOT NULL,
-    name            VARCHAR(30) NOT NULL,
+    name            VARCHAR(100) NOT NULL,
     level           VARCHAR(30),
     gender_category VARCHAR(30),
     mode            VARCHAR(30),
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS competition
 CREATE TABLE IF NOT EXISTS venue
 (
     venue_id INT(11)     NOT NULL AUTO_INCREMENT,
-    name     VARCHAR(50) NOT NULL,
+    name     VARCHAR(100) NOT NULL,
     city     VARCHAR(50) NOT NULL,
     capacity INT(11),
     PRIMARY KEY (venue_id)
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS venue
 CREATE TABLE IF NOT EXISTS team
 (
     team_id       INT(11)     NOT NULL AUTO_INCREMENT,
-    name          VARCHAR(30) NOT NULL,
+    name          VARCHAR(100) NOT NULL,
     short_name    VARCHAR(10),
     home_venue_id INT(11)     NOT NULL,
     PRIMARY KEY (team_id),

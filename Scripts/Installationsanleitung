@@ -1,0 +1,9 @@
+1. create database TurnierDB;
+
+2. use TurnierDB;
+
+3. source "Pfad zu create_schema.sql"
+
+4. source "Pfad zu insert_FussballTurnier.sql"
+
+5. source "Pfad zu insert_BasketballTurnier.sql"
