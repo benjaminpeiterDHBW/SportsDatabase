@@ -376,10 +376,6 @@ VALUES
         2, 1, 'Finished'
     );
 
--- Achtung: Ich habe hier HF1 auf 2:1 INF geändert, damit später
--- im Finale INF (Heim) vs MED (Auswärts) mit 2:1 gewinnen kann.
--- Wenn du lieber andere Ergebnisse willst, sag Bescheid, dann passe ich
--- Scores + Events konsistent an.
 
 -- ============================================================
 -- 9) game_event: für jedes Tor genau 1 Event
