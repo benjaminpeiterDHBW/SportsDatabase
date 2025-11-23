@@ -7,3 +7,5 @@
 4. source "Pfad zu insert_FussballTurnier.sql"
 
 5. source "Pfad zu insert_BasketballTurnier.sql"
+
+6. source "Pfad zu role.sql"
