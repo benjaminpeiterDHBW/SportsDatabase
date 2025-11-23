@@ -1,4 +1,3 @@
-
 USE TurnierDB;
 
 -- ============================================================
@@ -305,80 +304,80 @@ WHERE c.name = 'Hochschulcup Fußball Herren SoSe 2025';
 
 -- ============================================================
 -- 8) games: KO-Baum (Viertelfinale, Halbfinale, Finale)
+--    -> venue_id immer = home_venue_id des Heimteams
+--    -> Ergebnisse konsistent mit game_events und KO-Baum
 -- ============================================================
-
--- Alle Spiele in Friedrichshafen
--- QF1: INF 3:1 MCH
--- QF2: ELT 2:0 WIR
--- QF3: MED 1:1 SPR
--- QF4: BWL 2:0 PHY
--- HF1: INF 2:1 ELT
--- HF2: MED 1:0 BWL
--- Final: INF 2:1 MED
 
 INSERT INTO game (competition_id, venue_id, gameday_number, stage, scheduled_datetime,
                   away_team_id, home_team_id, home_score, away_score, status)
 VALUES
+    -- QF1: INF 3:1 MCH  (Heim: INF)
     (
         (SELECT competition_id FROM competition WHERE name = 'Hochschulcup Fußball Herren SoSe 2025'),
-        (SELECT venue_id FROM venue WHERE name = 'DHBW Campus Arena Friedrichshafen'),
+        (SELECT t.home_venue_id FROM team t WHERE t.short_name = 'INF'),
         1, 'Viertelfinale', '2025-06-01 18:00:00',
         (SELECT team_id FROM team WHERE short_name = 'MCH'),
         (SELECT team_id FROM team WHERE short_name = 'INF'),
         3, 1, 'Finished'
     ),
+    -- QF2: ELT 2:0 WIR  (Heim: ELT)
     (
         (SELECT competition_id FROM competition WHERE name = 'Hochschulcup Fußball Herren SoSe 2025'),
-        (SELECT venue_id FROM venue WHERE name = 'DHBW Campus Arena Friedrichshafen'),
+        (SELECT t.home_venue_id FROM team t WHERE t.short_name = 'ELT'),
         1, 'Viertelfinale', '2025-06-01 20:30:00',
         (SELECT team_id FROM team WHERE short_name = 'WIR'),
         (SELECT team_id FROM team WHERE short_name = 'ELT'),
         2, 0, 'Finished'
     ),
+    -- QF3: MED 2:1 SPR  (Heim: MED)
     (
         (SELECT competition_id FROM competition WHERE name = 'Hochschulcup Fußball Herren SoSe 2025'),
-        (SELECT venue_id FROM venue WHERE name = 'DHBW Campus Arena Friedrichshafen'),
+        (SELECT t.home_venue_id FROM team t WHERE t.short_name = 'MED'),
         1, 'Viertelfinale', '2025-06-02 18:00:00',
         (SELECT team_id FROM team WHERE short_name = 'SPR'),
         (SELECT team_id FROM team WHERE short_name = 'MED'),
-        1, 1, 'Finished'
+        2, 1, 'Finished'
     ),
+    -- QF4: BWL 2:0 PHY  (Heim: BWL)  **korrigiert: 2:0 statt 0:2**
     (
         (SELECT competition_id FROM competition WHERE name = 'Hochschulcup Fußball Herren SoSe 2025'),
-        (SELECT venue_id FROM venue WHERE name = 'DHBW Campus Arena Friedrichshafen'),
+        (SELECT t.home_venue_id FROM team t WHERE t.short_name = 'BWL'),
         1, 'Viertelfinale', '2025-06-02 20:30:00',
         (SELECT team_id FROM team WHERE short_name = 'PHY'),
         (SELECT team_id FROM team WHERE short_name = 'BWL'),
-        0, 2, 'Finished'
+        2, 0, 'Finished'
     ),
+    -- HF1: INF 2:1 ELT  (Sieger QF1 vs Sieger QF2, Heim: INF)
     (
         (SELECT competition_id FROM competition WHERE name = 'Hochschulcup Fußball Herren SoSe 2025'),
-        (SELECT venue_id FROM venue WHERE name = 'DHBW Campus Arena Friedrichshafen'),
+        (SELECT t.home_venue_id FROM team t WHERE t.short_name = 'INF'),
         2, 'Halbfinale', '2025-06-05 18:00:00',
         (SELECT team_id FROM team WHERE short_name = 'ELT'),
         (SELECT team_id FROM team WHERE short_name = 'INF'),
         2, 1, 'Finished'
     ),
+    -- HF2: MED 1:0 BWL  (Sieger QF3 vs Sieger QF4, Heim: MED) **korrigiert: 1:0 statt 0:1**
     (
         (SELECT competition_id FROM competition WHERE name = 'Hochschulcup Fußball Herren SoSe 2025'),
-        (SELECT venue_id FROM venue WHERE name = 'DHBW Campus Arena Friedrichshafen'),
+        (SELECT t.home_venue_id FROM team t WHERE t.short_name = 'MED'),
         2, 'Halbfinale', '2025-06-05 20:30:00',
         (SELECT team_id FROM team WHERE short_name = 'BWL'),
         (SELECT team_id FROM team WHERE short_name = 'MED'),
-        0, 1, 'Finished'
+        1, 0, 'Finished'
     ),
+    -- Finale: INF 2:1 MED  (Sieger HF1 vs Sieger HF2, Heim: INF)
     (
         (SELECT competition_id FROM competition WHERE name = 'Hochschulcup Fußball Herren SoSe 2025'),
-        (SELECT venue_id FROM venue WHERE name = 'DHBW Campus Arena Friedrichshafen'),
+        (SELECT t.home_venue_id FROM team t WHERE t.short_name = 'INF'),
         3, 'Finale', '2025-06-10 19:30:00',
         (SELECT team_id FROM team WHERE short_name = 'MED'),
         (SELECT team_id FROM team WHERE short_name = 'INF'),
         2, 1, 'Finished'
     );
 
-
 -- ============================================================
 -- 9) game_event: für jedes Tor genau 1 Event
+--     (konsistent zu den Ergebnissen oben)
 -- ============================================================
 
 -- QF1: INF 3:1 MCH  → 4 Tore
@@ -449,7 +448,7 @@ VALUES
         'Abstauber nach Abpraller zum 2:0'
     );
 
--- QF3: MED 1:1 SPR  → 2 Tore
+-- QF3: MED 2:1 SPR  → 3 Tore
 INSERT INTO game_event (game_id, event_minute, event_type, player_id, team_id, description)
 VALUES
     (
@@ -471,6 +470,16 @@ VALUES
         (SELECT player_id FROM player WHERE student_id = '100505'),
         (SELECT team_id FROM team WHERE short_name = 'SPR'),
         'Schuss aus kurzer Distanz zum 1:1'
+    ),
+    (
+        (SELECT g.game_id FROM game g
+                                   JOIN team ht ON g.home_team_id = ht.team_id
+                                   JOIN team at ON g.away_team_id = at.team_id
+         WHERE g.stage = 'Viertelfinale' AND ht.short_name = 'MED' AND at.short_name = 'SPR'),
+        78, 'Tor',
+        (SELECT player_id FROM player WHERE student_id = '100406'),
+        (SELECT team_id FROM team WHERE short_name = 'MED'),
+        'Flachschuss ins Eck zum 2:1 Endstand'
     );
 
 -- QF4: BWL 2:0 PHY  → 2 Tore
