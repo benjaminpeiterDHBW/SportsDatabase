@@ -1,3 +1,6 @@
+CREATE DATABASE IF NOT EXISTS TurnierDB;
+USE TurnierDB;
+
 -- Tabelle 'sport':
 -- Verwaltet die verschiedenen Teamsportarten (z.B. Fußball, Basketball)
 -- inklusive Standardteamgröße und Angabe, ob Hallensport oder nicht.
