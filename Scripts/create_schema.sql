@@ -1,6 +1,3 @@
-CREATE DATABASE IF NOT EXISTS sportsdb;
-USE sportsdb;
-
 -- Tabelle 'sport':
 -- Verwaltet die verschiedenen Teamsportarten (z.B. Fußball, Basketball)
 -- inklusive Standardteamgröße und Angabe, ob Hallensport oder nicht.
