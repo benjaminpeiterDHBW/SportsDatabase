@@ -68,11 +68,27 @@ GRANT ALL PRIVILEGES ON TurnierDB.*
 
 -- Nutzer anlegen
 CREATE OR REPLACE USER 'systemadministrator'@'%' IDENTIFIED BY 'secure_password';
-CREATE OR REPLACE USER 'tim'@'%';
+CREATE OR REPLACE USER 'user_vereinsmanager'@'%' IDENTIFIED BY '';
+CREATE OR REPLACE USER 'user_turnierveranstalter'@'%' IDENTIFIED BY '';
+CREATE OR REPLACE USER 'user_spielberichterstatter'@'%' IDENTIFIED BY '';
+CREATE OR REPLACE USER 'user_viewer'@'%' IDENTIFIED BY '';
+CREATE OR REPLACE USER 'user_datenpfleger'@'%' IDENTIFIED BY '';
 
 -- Rechte vergeben
-GRANT r_vereinsmanager TO 'tim'@'%';
-SET DEFAULT ROLE r_vereinsmanager FOR 'tim'@'%';
+GRANT r_vereinsmanager TO 'user_vereinsmanager'@'%';
+SET DEFAULT ROLE r_vereinsmanager FOR 'user_vereinsmanager'@'%';
+
+GRANT r_turnierveranstalter TO 'user_turnierveranstalter'@'%';
+SET DEFAULT ROLE r_turnierveranstalter FOR 'user_turnierveranstalter'@'%';
+
+GRANT r_spielberichtserstatter TO 'user_spielberichterstatter'@'%';
+SET DEFAULT ROLE r_spielberichtserstatter FOR 'user_spielberichterstatter'@'%';
+
+GRANT r_viewer TO 'user_viewer'@'%';
+SET DEFAULT ROLE r_viewer FOR 'user_viewer'@'%';
+
+GRANT r_datenpfleger TO 'user_datenpfleger'@'%';
+SET DEFAULT ROLE r_datenpfleger FOR 'user_datenpfleger'@'%';
 
 
 FLUSH PRIVILEGES;
