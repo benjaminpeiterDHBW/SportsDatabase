@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/Scripts/create_schema.sql" value="c475a9be-6f56-473a-afd5-ee88795e3ba2" />
+    <file url="file://$PROJECT_DIR$/Scripts/insert_FussballTurnier.sql" value="c475a9be-6f56-473a-afd5-ee88795e3ba2" />
+    <file url="file://$PROJECT_DIR$/Views/view_AbschlusstabelleBasketball.sql" value="c475a9be-6f56-473a-afd5-ee88795e3ba2" />
+    <file url="file://$PROJECT_DIR$/Views/view_TopScorer_Fussball.sql" value="c475a9be-6f56-473a-afd5-ee88795e3ba2" />
+  </component>
+</project>

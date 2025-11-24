@@ -304,8 +304,6 @@ WHERE c.name = 'Hochschulcup Fußball Herren SoSe 2025';
 
 -- ============================================================
 -- 8) games: KO-Baum (Viertelfinale, Halbfinale, Finale)
---    -> venue_id immer = home_venue_id des Heimteams
---    -> Ergebnisse konsistent mit game_events und KO-Baum
 -- ============================================================
 
 INSERT INTO game (competition_id, venue_id, gameday_number, stage, scheduled_datetime,
@@ -376,8 +374,7 @@ VALUES
     );
 
 -- ============================================================
--- 9) game_event: für jedes Tor genau 1 Event
---     (konsistent zu den Ergebnissen oben)
+-- 9) game_event
 -- ============================================================
 
 -- QF1: INF 3:1 MCH  → 4 Tore

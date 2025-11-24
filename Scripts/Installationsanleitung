@@ -9,3 +9,7 @@
 5. source "Pfad zu insert_BasketballTurnier.sql"
 
 6. source "Pfad zu role.sql"
+
+View Hinzufügen:
+source "Pfad zur jeweiligen View"
+

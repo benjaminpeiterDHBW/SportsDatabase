@@ -1,6 +1,6 @@
 use TurnierDB;
 
-CREATE OR REPLACE VIEW vw_hochschulcup_2025_abschluss AS
+CREATE OR REPLACE VIEW vw_hochschulcup_2025_abschluss_Fussball AS
 WITH
     comp AS (
         SELECT competition_id

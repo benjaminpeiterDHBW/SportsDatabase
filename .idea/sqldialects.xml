@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/Scripts/create_schema.sql" dialect="MariaDB" />
+    <file url="file://$PROJECT_DIR$/Scripts/insert_FussballTurnier.sql" dialect="MariaDB" />
+    <file url="file://$PROJECT_DIR$/Views/view_AbschlusstabelleBasketball.sql" dialect="MariaDB" />
+    <file url="file://$PROJECT_DIR$/Views/view_TopScorer_Fussball.sql" dialect="MariaDB" />
     <file url="PROJECT" dialect="MariaDB" />
   </component>
 </project>
