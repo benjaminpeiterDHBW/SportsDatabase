@@ -1,14 +1,10 @@
-1. create database TurnierDB;
+1. source "Pfad zu create_schema.sql"
 
-2. use TurnierDB;
+2. source "Pfad zu insert_FussballTurnier.sql"
 
-3. source "Pfad zu create_schema.sql"
+3. source "Pfad zu insert_BasketballTurnier.sql"
 
-4. source "Pfad zu insert_FussballTurnier.sql"
-
-5. source "Pfad zu insert_BasketballTurnier.sql"
-
-6. source "Pfad zu role.sql"
+4. source "Pfad zu role.sql"
 
 Views hinzufügen:
 source "Pfad zur jeweiligen View"
