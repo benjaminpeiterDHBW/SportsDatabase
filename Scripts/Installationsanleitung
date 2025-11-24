@@ -10,6 +10,6 @@
 
 6. source "Pfad zu role.sql"
 
-View Hinzufügen:
+Views hinzufügen:
 source "Pfad zur jeweiligen View"
 
