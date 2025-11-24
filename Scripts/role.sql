@@ -68,7 +68,7 @@ GRANT ALL PRIVILEGES ON TurnierDB.*
 
 -- Nutzer anlegen
 CREATE OR REPLACE USER 'systemadministrator'@'%' IDENTIFIED BY 'secure_password';
-CREATE OR REPLACE USER 'tim'@'%' IDENTIFIED BY 'tim_password';
+CREATE OR REPLACE USER 'tim'@'%';
 
 -- Rechte vergeben
 GRANT r_vereinsmanager TO 'tim'@'%';
