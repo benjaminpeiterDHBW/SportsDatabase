@@ -1,6 +1,6 @@
 use TurnierDB;
 
-CREATE OR REPLACE VIEW vw_hochschulcup_2025_home_win_rate AS
+CREATE OR REPLACE VIEW vw_hochschulcup_2025_home_win_rateFussball AS
 WITH
     comp AS (
         SELECT competition_id

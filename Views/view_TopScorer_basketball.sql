@@ -1,6 +1,6 @@
 use TurnierDB;
 
-CREATE OR REPLACE VIEW vw_hochschulcup_basketball_2025_scorers AS
+CREATE OR REPLACE VIEW vw_top_scorer_2025_basketball AS
 WITH
 -- Wettbewerb einschränken
 comp AS (

@@ -3,6 +3,8 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/Scripts/create_schema.sql" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/Scripts/insert_FussballTurnier.sql" dialect="MariaDB" />
+    <file url="file://$PROJECT_DIR$/Scripts/role.sql" dialect="MariaDB" />
+    <file url="file://$PROJECT_DIR$/Views/show_team_players.sql" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/Views/view_AbschlusstabelleBasketball.sql" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/Views/view_TopScorer_Fussball.sql" dialect="MariaDB" />
     <file url="PROJECT" dialect="MariaDB" />
