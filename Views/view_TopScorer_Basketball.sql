@@ -78,4 +78,3 @@ SELECT
     free_throws_made
 FROM ranked
 ORDER BY place;
-;

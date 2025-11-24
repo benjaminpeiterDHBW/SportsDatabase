@@ -7,5 +7,6 @@
     <file url="file://$PROJECT_DIR$/Views/show_team_players.sql" value="c475a9be-6f56-473a-afd5-ee88795e3ba2" />
     <file url="file://$PROJECT_DIR$/Views/view_AbschlusstabelleBasketball.sql" value="c475a9be-6f56-473a-afd5-ee88795e3ba2" />
     <file url="file://$PROJECT_DIR$/Views/view_TopScorer_Fussball.sql" value="c475a9be-6f56-473a-afd5-ee88795e3ba2" />
+    <file url="file://$PROJECT_DIR$/Views/view_home_win_rateFussball.sql" value="c475a9be-6f56-473a-afd5-ee88795e3ba2" />
   </component>
 </project>

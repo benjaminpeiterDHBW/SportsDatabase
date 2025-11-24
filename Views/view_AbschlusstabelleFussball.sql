@@ -88,4 +88,3 @@ SELECT
     goal_diff
 FROM final_table
 ORDER BY place;
-;

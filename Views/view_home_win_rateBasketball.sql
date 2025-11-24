@@ -40,4 +40,3 @@ ORDER BY
     home_win_percentage DESC,
     hg.home_games DESC,
     t.short_name;
-;

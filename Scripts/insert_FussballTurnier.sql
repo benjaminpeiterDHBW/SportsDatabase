@@ -309,15 +309,15 @@ WHERE c.name = 'Hochschulcup Fußball Herren SoSe 2025';
 INSERT INTO game (competition_id, venue_id, gameday_number, stage, scheduled_datetime,
                   away_team_id, home_team_id, home_score, away_score, status)
 VALUES
-    -- QF1: INF 3:1 MCH  (Heim: INF)
-    (
-        (SELECT competition_id FROM competition WHERE name = 'Hochschulcup Fußball Herren SoSe 2025'),
-        (SELECT t.home_venue_id FROM team t WHERE t.short_name = 'INF'),
+-- QF1: MCH 1:3 INF (Heim/Auswärts vertauscht)
+(
+    (SELECT competition_id FROM competition WHERE name = 'Hochschulcup Fußball Herren SoSe 2025'),
+        (SELECT t.home_venue_id FROM team t WHERE t.short_name = 'MCH'),
         1, 'Viertelfinale', '2025-06-01 18:00:00',
-        (SELECT team_id FROM team WHERE short_name = 'MCH'),
-        (SELECT team_id FROM team WHERE short_name = 'INF'),
-        3, 1, 'Finished'
-    ),
+        (SELECT team_id FROM team WHERE short_name = 'INF'),   -- jetzt AUSWÄRTS
+        (SELECT team_id FROM team WHERE short_name = 'MCH'),   -- jetzt HEIM
+        1, 3, 'Finished'                                       -- Score getauscht
+),
     -- QF2: ELT 2:0 WIR  (Heim: ELT)
     (
         (SELECT competition_id FROM competition WHERE name = 'Hochschulcup Fußball Herren SoSe 2025'),
