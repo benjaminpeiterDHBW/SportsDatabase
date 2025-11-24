@@ -1,3 +1,5 @@
+Installationsanleitung:
+
 1. source "Pfad zu create_schema.sql"
 
 2. source "Pfad zu insert_FussballTurnier.sql"
